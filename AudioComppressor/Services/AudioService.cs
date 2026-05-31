@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using System;
-using Microsoft.VisualBasic;
+using System.IO;
 
 namespace AudioCompressor.Services
 {
@@ -14,19 +9,18 @@ namespace AudioCompressor.Services
         private WaveOutEvent? _waveOut;
         private AudioFileReader? _audioReader;
 
-        // قراءة ملف صوتي واستخراج WaveFormat وعينات
+        // قراءة الملف الصوتي وتحويله إلى مصفوفة عينات float
         public (WaveFormat format, float[] samples) LoadAudio(string filePath)
         {
-            var reader = new AudioFileReader(filePath);
+            using var reader = new AudioFileReader(filePath);
             var format = reader.WaveFormat;
-            int sampleCount = (int)(reader.Length / 4); // float = 4 bytes
+            int sampleCount = (int)(reader.Length / 4); // 4 bytes per float
             float[] samples = new float[sampleCount];
             reader.Read(samples, 0, sampleCount);
-            reader.Dispose();
             return (format, samples);
         }
 
-        // تشغيل الملف
+        // تشغيل الملف من البداية
         public void Play(string filePath)
         {
             Stop();
@@ -36,14 +30,17 @@ namespace AudioCompressor.Services
             _waveOut.Play();
         }
 
+        // إيقاف التشغيل وتحرير الموارد
         public void Stop()
         {
             _waveOut?.Stop();
             _waveOut?.Dispose();
             _audioReader?.Dispose();
+            _waveOut = null;
+            _audioReader = null;
         }
 
-        // استخراج خصائص الملف بدون تحميل العينات كلها
+        // استخراج خصائص الملف (بدون تحميل العينات كلها)
         public (TimeSpan duration, int sampleRate, int channels, int bitRate, string codec) GetProperties(string filePath)
         {
             using var reader = new AudioFileReader(filePath);
@@ -54,7 +51,5 @@ namespace AudioCompressor.Services
             string codec = reader.WaveFormat.Encoding.ToString();
             return (duration, sampleRate, channels, bitRate, codec);
         }
-
-
     }
 }
