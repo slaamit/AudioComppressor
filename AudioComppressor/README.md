@@ -20,5 +20,5 @@ A WPF desktop application for loading, playing, and compressing audio files usin
 ### 1. Clone the repository
 
 `bash
-git clone https://github.com/slaamit/AudioCompressor.git
+git clone https://github.com/slaamit/AudioComppressor.git
 cd AudioCompressor
