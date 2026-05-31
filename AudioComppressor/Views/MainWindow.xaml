@@ -1,0 +1,45 @@
+﻿<Window x:Class="AudioCompressor.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:AudioCompressor.ViewModels"
+        Title="Audio Compressor" Height="500" Width="700"
+        AllowDrop="True" Drop="Window_Drop">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Command="{Binding LoadCommand}" Content="Load Audio" Padding="10,5" Margin="0,0,5,0"/>
+            <Button Command="{Binding PlayCommand}" Content="Play" Padding="10,5" Margin="0,0,5,0"/>
+            <Button Command="{Binding StopCommand}" Content="Stop" Padding="10,5"/>
+
+        </StackPanel>
+        <GroupBox Header="Properties" Grid.Row="1" Margin="0,5">
+            <TextBlock Text="{Binding AudioInfo}" TextWrapping="Wrap" Margin="5"/>
+        </GroupBox>
+        <GroupBox Header="Compression Settings" Grid.Row="2" Margin="0,5">
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Algorithms}" SelectedItem="{Binding SelectedAlgorithm}" Width="150" Margin="5"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Sample Rate (Hz):" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox Text="{Binding NewSampleRate}" Width="80" Margin="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Quantization Levels:" VerticalAlignment="Center" Margin="5"/>
+                    <TextBox Text="{Binding QuantizationLevels}" Width="80" Margin="5"/>
+                </StackPanel>
+                <Button Command="{Binding CompressCommand}" Content="Compress" Padding="10,5" Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Decompression" Grid.Row="3" Margin="0,5">
+            <Button Command="{Binding DecompressCommand}" Content="Decompress" Padding="10,5" Margin="5"/>
+        </GroupBox>
+        <ProgressBar Grid.Row="4" Height="20" Value="{Binding ProgressValue}" Margin="0,5"/>
+        <TextBlock Grid.Row="5" Text="{Binding StatusMessage}" TextWrapping="Wrap" Margin="5"/>
+    </Grid>
+</Window>
